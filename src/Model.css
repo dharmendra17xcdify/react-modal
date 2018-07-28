@@ -15,3 +15,9 @@
 .textarea__count {
     float:right
 }
+
+#savebtn {
+    width: -webkit-fill-available;
+    border-radius: 44px;
+    -webkit-border-vertical-spacing: 10px;
+}

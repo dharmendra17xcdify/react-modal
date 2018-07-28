@@ -13,17 +13,20 @@ const jobId = ['Active', 'Passive', 'Urgent'];
 const jobSearch = [
     {
       name: 'Active',
-      color: 'blue',
+      color: '#7c35d9',
+      textColor: 'white',
       description: "I'm ready to move on from my current role" 
     },
     {
       name: 'Passive',
-      color: 'black',
+      color: '#5a5452',
+      textColor: 'white',
       description: "I'm ready to move on from my current role" 
     },
     {
       name: 'Urgent',
-      color: 'red',
+      color: '#D6191A',
+      textColor: 'white',
       description: "I'm ready to move on from my current role" 
     }
 ]
@@ -98,16 +101,19 @@ class Model extends React.Component {
       activeData: {
         name: '',
         color: '',
+        textColor: '',
         description: "" 
       },
       passiveData: {
         name: '',
         color: '',
+        textColor: '',
         description: "" 
       },
       urgentData: {
         name: '',
         color: '',
+        textColor: '',
         description: "" 
       }
     }
@@ -156,16 +162,19 @@ class Model extends React.Component {
             activeData: {
                   name: jobIdData.name,
                   color: jobIdData.color,
+                  textColor: jobIdData.textColor,
                   description: jobIdData.description
               },
               urgentData: {
                 name: '',
                 color: '',
+                textColor: '',
                 description: ''
               },
               passiveData: {
                 name: '',
                 color: '',
+                textColor: '',
                 description: ''
               }
           });
@@ -175,16 +184,19 @@ class Model extends React.Component {
           passiveData: {
                 name: jobIdData.name,
                 color: jobIdData.color,
+                textColor: jobIdData.textColor,
                 description: jobIdData.description
             },
             activeData: {
               name: '',
               color: '',
+              textColor: '',
               description: ''
           },
           urgentData: {
             name: '',
             color: '',
+            textColor: '',
             description: ''
           }
         });
@@ -194,16 +206,19 @@ class Model extends React.Component {
         urgentData: {
               name: jobIdData.name,
               color: jobIdData.color,
+              textColor: jobIdData.textColor,
               description: jobIdData.description
           },
           activeData: {
             name: '',
             color: '',
+            textColor: '',
             description: ''
           },
           passiveData: {
             name: '',
             color: '',
+            textColor: '',
             description: ''
           }
       });
@@ -269,21 +284,24 @@ class Model extends React.Component {
             </ul> */}
 
             <div className="card">
-              <div className="card-body" onClick={this.handleClick.bind(this)} style={{backgroundColor: this.state.passiveData.color}}>
+              <div className="card-body" onClick={this.handleClick.bind(this)} 
+              style={{backgroundColor: this.state.passiveData.color, color: this.state.passiveData.textColor}}>
                 <h5 className="card-title">Passive</h5>
-                <h6 className="card-subtitle mb-2 text-muted">{this.state.passiveData.description}</h6>
+                <h6 className="card-subtitle mb-2 text-muted" style={{color: this.state.passiveData.textColor}}>{this.state.passiveData.description}</h6>
               </div>
             </div><br/>
             <div className="card">
-              <div className="card-body" onClick={this.handleClick.bind(this)} style={{backgroundColor: this.state.activeData.color}}>
+              <div className="card-body" onClick={this.handleClick.bind(this)} 
+              style={{backgroundColor: this.state.activeData.color, color: this.state.activeData.textColor}}>
                 <h5 className="card-title">Active</h5>
-                <h6 className="card-subtitle mb-2 text-muted">{this.state.activeData.description}</h6>
+                <h6 className="card-subtitle mb-2 text-muted" style={{color: this.state.activeData.textColor}}>{this.state.activeData.description}</h6>
               </div>
             </div><br/>
             <div className="card">
-              <div className="card-body" onClick={this.handleClick.bind(this)} style={{backgroundColor: this.state.urgentData.color}}>
+              <div className="card-body" onClick={this.handleClick.bind(this)} 
+              style={{backgroundColor: this.state.urgentData.color, color: this.state.urgentData.textColor}}>
                 <h5 className="card-title">Urgent</h5>
-                <h6 className="card-subtitle mb-2 text-muted">{this.state.urgentData.description}</h6>
+                <h6 className="card-subtitle mb-2 text-muted" style={{color: this.state.urgentData.textColor}}>{this.state.urgentData.description}</h6>
               </div>
             </div><br/>
 
@@ -385,7 +403,7 @@ class Model extends React.Component {
           </FormGroup>
           <FormGroup>        
             <div>
-              <Button color="primary" size="lg" block type="submit" className="btn btn-default">Save</Button>
+              <button id="savebtn" type="submit" className="btn btn-primary">Save</button>
             </div>
           </FormGroup>
           </Form>
