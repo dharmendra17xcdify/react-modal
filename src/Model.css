@@ -1,0 +1,13 @@
+.container {
+    width: 100%;
+    height: 50%;
+}
+
+.salary {
+    width: 50%;
+}
+
+.modal-open {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
