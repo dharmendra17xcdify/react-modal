@@ -12,6 +12,7 @@
     "react-form-data": "^0.2.3",
     "react-modal": "^3.5.1",
     "react-scripts": "1.1.4",
+    "react-textarea-count": "^1.0.3",
     "reactstrap": "^6.3.0"
   },
   "scripts": {

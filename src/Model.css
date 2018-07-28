@@ -11,3 +11,7 @@
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+.textarea__count {
+    float:right
+}

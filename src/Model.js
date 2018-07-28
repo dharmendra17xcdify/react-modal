@@ -30,13 +30,15 @@ const jobSearch = [
 
 const customStyles = {
   content : {
-    width                 : '50%',
+    width                 : '40%',
     top                   : '50%',
     left                  : '50%',
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-50%, -50%)',
+    height: 'calc(100vh - 10px)',
+    overflow: 'auto'
   }
 };
 
@@ -77,6 +79,8 @@ class Model extends React.Component {
     super();
 
     this.state = {
+      chars_left: 10,
+      max_char: 10,
       modalIsOpen: false,
       ...INITIAL_STATE,
       formData: {
@@ -134,6 +138,13 @@ class Model extends React.Component {
         position: event.target.value
       }});
     }
+  }
+
+  handleWordCount() {
+    const charCount = this.state.describe.length;
+    const maxChar = this.state.max_char;
+    const charLength = maxChar - charCount;
+    this.setState({ chars_left: charLength });
   }
 
   handleClick = (e) => {
@@ -242,12 +253,12 @@ class Model extends React.Component {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <ModalHeader toggle={this.toggle}>Edit your ideal job
+          <h4 toggle={this.toggle}>Edit your ideal job
           {/* <Button onClick={this.closeModal}>close</Button> */}
           <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={this.closeModal}>
           <span aria-hidden="true">&times;</span>
           </button>
-          </ModalHeader>
+          </h4>
           <h2 ref={subtitle => this.subtitle = subtitle}></h2>
           
           <p>How serious is your job search?</p>
@@ -330,11 +341,11 @@ class Model extends React.Component {
                 value={timeCommit} 
                 onChange={event => this.setState(byPropKey('timeCommit', event.target.value))}>
                   <option>select</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
                 </Input>
               </FormGroup>
               <FormGroup className="form-group col-md-2">
@@ -365,10 +376,11 @@ class Model extends React.Component {
           </div>
           <FormGroup>
             <Label for="describe">Describe your ideal job</Label>
-            <Input type="textarea" name="describe" id="describe" 
+            <Input type="textarea" name="describe" id="describe" rows={4} maxLength={this.state.max_char}
+            required
             value={describe} 
-            onChange={event => this.setState(byPropKey('describe', event.target.value))}
-            placeholder="Describe your ideal job" />
+            onChange={event => this.setState(byPropKey('describe', event.target.value), this.handleWordCount)}
+            placeholder="Describe your ideal job" /><span className="textarea__count">{this.state.chars_left}/{this.state.max_char}</span>
             <FormText>*Required</FormText>
           </FormGroup>
           <FormGroup>        
