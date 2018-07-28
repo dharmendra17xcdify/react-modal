@@ -2,28 +2,31 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import FormData from 'react-form-data';
+import _ from 'lodash'; 
 import { Button, Form, ModalHeader, FormGroup, Label, Input, FormText, FormFeedback} from 'reactstrap';
 import CurrencyFormat from 'react-currency-format';
 
 import './Model.css'
 
-const jobSearch = [{
-  active: {
-    name: 'Active',
-    color: 'blue',
-    description: "I'm ready to move on from my current role" 
-  },
-  passive: {
-    name: 'Passive',
-    color: 'black',
-    description: "I'm ready to move on from my current role" 
-  },
-  urgent: {
-    name: 'Urgent',
-    color: 'red',
-    description: "I'm ready to move on from my current role" 
-  }
-}]
+const jobId = ['Active', 'Passive', 'Urgent'];
+
+const jobSearch = [
+    {
+      name: 'Active',
+      color: 'blue',
+      description: "I'm ready to move on from my current role" 
+    },
+    {
+      name: 'Passive',
+      color: 'black',
+      description: "I'm ready to move on from my current role" 
+    },
+    {
+      name: 'Urgent',
+      color: 'red',
+      description: "I'm ready to move on from my current role" 
+    }
+]
 
 const customStyles = {
   content : {
@@ -54,12 +57,12 @@ const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
 });
 
-// function JobSearch ({title, onClick}) {
+// function JobSearch ({title, jobSearchData, onClick}) {
 //   return (<div className="answer" onClick={() => {onClick(title);}}>
 //       <div className="card">
-//         <div className="card-body" style={{backgroundColor: "green"}}>
+//         <div className="card-body" style={{backgroundColor: jobSearchData.color}}>
 //           <h5 className="card-title">{title}</h5>
-//           <h6 className="card-subtitle mb-2 text-muted">Card subtitle</h6>
+//           <h6 className="card-subtitle mb-2 text-muted">{jobSearchData.description}</h6>
 //         </div>
 //       </div><br/>
 //   </div>
@@ -75,7 +78,34 @@ class Model extends React.Component {
 
     this.state = {
       modalIsOpen: false,
-      ...INITIAL_STATE
+      ...INITIAL_STATE,
+      formData: {
+        jobSearchType: '',
+        position: '',
+        minSalary: '',
+        maxSalary: '',
+        companySize: '',
+        timeCommit: '',
+        month: '',
+        day: '',
+        year: '',
+        describe: ''
+      },
+      activeData: {
+        name: '',
+        color: '',
+        description: "" 
+      },
+      passiveData: {
+        name: '',
+        color: '',
+        description: "" 
+      },
+      urgentData: {
+        name: '',
+        color: '',
+        description: "" 
+      }
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -106,8 +136,73 @@ class Model extends React.Component {
     }
   }
 
+  handleClick = (e) => {
+      let jobIdData = _.find(jobSearch, {name: e.target.innerText})
+
+      if(jobIdData && jobIdData.name == 'Active'){
+          this.setState({
+            jobSearchType: jobIdData.name,
+            activeData: {
+                  name: jobIdData.name,
+                  color: jobIdData.color,
+                  description: jobIdData.description
+              },
+              urgentData: {
+                name: '',
+                color: '',
+                description: ''
+              },
+              passiveData: {
+                name: '',
+                color: '',
+                description: ''
+              }
+          });
+      } else if(jobIdData && jobIdData.name == 'Passive'){
+        this.setState({
+          jobSearchType: jobIdData.name,
+          passiveData: {
+                name: jobIdData.name,
+                color: jobIdData.color,
+                description: jobIdData.description
+            },
+            activeData: {
+              name: '',
+              color: '',
+              description: ''
+          },
+          urgentData: {
+            name: '',
+            color: '',
+            description: ''
+          }
+        });
+    } else if(jobIdData && jobIdData.name == 'Urgent'){
+      this.setState({
+        jobSearchType: jobIdData.name,
+        urgentData: {
+              name: jobIdData.name,
+              color: jobIdData.color,
+              description: jobIdData.description
+          },
+          activeData: {
+            name: '',
+            color: '',
+            description: ''
+          },
+          passiveData: {
+            name: '',
+            color: '',
+            description: ''
+          }
+      });
+    }
+  }
+
   handleSubmit(event) {
-    this.setState(() => ({ ...INITIAL_STATE }));
+    this.setState(() => ({ ...INITIAL_STATE ,
+    }));
+    console.log(this.state);
     event.preventDefault();
   }
 
@@ -156,23 +251,28 @@ class Model extends React.Component {
           <h2 ref={subtitle => this.subtitle = subtitle}></h2>
           
           <p>How serious is your job search?</p>
-          <Form onChange={this.updateFormData} onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleSubmit}>
+
+            {/* <ul className="">
+                <li className="form-group" value={jobId}>{jobId.map((title) => <JobSearch title={title} key={title}/>)}</li>
+            </ul> */}
+
             <div className="card">
-              <div className="card-body" style={{backgroundColor: "green"}}>
+              <div className="card-body" onClick={this.handleClick.bind(this)} style={{backgroundColor: this.state.passiveData.color}}>
                 <h5 className="card-title">Passive</h5>
-                <h6 className="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                <h6 className="card-subtitle mb-2 text-muted">{this.state.passiveData.description}</h6>
               </div>
             </div><br/>
             <div className="card">
-              <div className="card-body" style={{backgroundColor: "blue"}}>
+              <div className="card-body" onClick={this.handleClick.bind(this)} style={{backgroundColor: this.state.activeData.color}}>
                 <h5 className="card-title">Active</h5>
-                <h6 className="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                <h6 className="card-subtitle mb-2 text-muted">{this.state.activeData.description}</h6>
               </div>
             </div><br/>
             <div className="card">
-              <div className="card-body" style={{backgroundColor: "red"}}>
+              <div className="card-body" onClick={this.handleClick.bind(this)} style={{backgroundColor: this.state.urgentData.color}}>
                 <h5 className="card-title">Urgent</h5>
-                <h6 className="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                <h6 className="card-subtitle mb-2 text-muted">{this.state.urgentData.description}</h6>
               </div>
             </div><br/>
 
