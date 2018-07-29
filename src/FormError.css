@@ -1,0 +1,16 @@
+.error-message {
+    color: red;
+}
+
+.error-icon {
+    font-size:15px;
+    color:red;
+}
+
+.list-error {
+    display: block;
+}
+
+.ul {
+    padding: 0px
+}
