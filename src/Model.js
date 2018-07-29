@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import FormData from 'react-form-data';
+import FormErrors from './FormErrors';
 import _ from 'lodash'; 
 import { Button, Form, ModalHeader, FormGroup, Label, Input, FormText, FormFeedback} from 'reactstrap';
 import CurrencyFormat from 'react-currency-format';
@@ -98,24 +99,22 @@ class Model extends React.Component {
         year: '',
         describe: ''
       },
-      activeData: {
-        name: '',
-        color: '',
-        textColor: '',
-        description: "" 
-      },
-      passiveData: {
-        name: '',
-        color: '',
-        textColor: '',
-        description: "" 
-      },
-      urgentData: {
-        name: '',
-        color: '',
-        textColor: '',
-        description: "" 
-      }
+      activeData: {name: '', color: '', textColor: '', description: ""},
+      passiveData: {name: '', color: '', textColor: '', description: ""},
+      urgentData: {name: '', color: '', textColor: '', description: ""},
+      // validation
+      formErrors: {position: '', minSalary: '', maxSalary: '', companySize: '', timeCommit: '', month: '', day: '', year: '', describe: '' },
+      positionValid: false,
+      minSalaryValid: false,
+      maxSalaryValid: false,
+      minSalaryValid: false,
+      companySizeValid: false,
+      timeCommitValid: false,
+      monthValid: false,
+      dayValid: false,
+      yearValid: false,
+      describeValid: false,
+      formValid: false
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -144,6 +143,13 @@ class Model extends React.Component {
         position: event.target.value
       }});
     }
+  }
+
+  handleUserInput (e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({[name]: value}, 
+                  () => { this.validateField(name, value) });
   }
 
   handleWordCount() {
@@ -232,6 +238,79 @@ class Model extends React.Component {
     event.preventDefault();
   }
 
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let positionValid = this.state.positionValid;
+    let minSalaryValid = this.state.minSalaryValid;
+    let maxSalaryValid = this.state.maxSalaryValid;
+    let companySizeValid = this.state.companySizeValid;
+    let timeCommitValid = this.state.timeCommitValid;
+    let monthValid = this.state.monthValid;
+    let dayValid = this.state.dayValid;
+    let yearValid = this.state.yearValid;
+    let describeValid = this.state.describeValid;
+  
+    switch(fieldName) {
+      case 'position':
+        positionValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+        fieldValidationErrors.position = positionValid ? '' : ' is invalid';
+        break;
+      case 'minsalary':
+        minSalaryValid = value.length >= 6;
+        fieldValidationErrors.minSalary = minSalaryValid ? '': ' is too short';
+        break;
+      case 'maxsalary':
+        maxSalaryValid = value.length >= 6;
+        fieldValidationErrors.maxSalary = maxSalaryValid ? '': ' is too short';
+      break;
+      case 'companysize':
+        companySizeValid = value.length >= 6;
+        fieldValidationErrors.companySize = companySizeValid ? '': ' is too short';
+      break;
+      case 'time':
+        timeCommitValid = value.length >= 6;
+        fieldValidationErrors.timeCommit = timeCommitValid ? '': ' is too short';
+      break;
+      case 'month':
+        monthValid = value.length >= 6;
+        fieldValidationErrors.month = monthValid ? '': ' is too short';
+      break;
+      case 'day':
+        dayValid = value.length >= 6;
+        fieldValidationErrors.day = dayValid ? '': ' is too short';
+      break;
+      case 'year':
+        yearValid = value.length >= 6;
+        fieldValidationErrors.year = yearValid ? '': ' is too short';
+      break;
+      case 'describe':
+        describeValid = value.length >= 6;
+        fieldValidationErrors.describe = describeValid ? '': ' is too short';
+      break;
+      default:
+        break;
+    }
+    this.setState({formErrors: fieldValidationErrors,
+                    positionValid: positionValid,
+                    minSalaryValid: minSalaryValid,
+                    maxSalaryValid: maxSalaryValid,
+                    companySizeValid: companySizeValid,
+                    timeCommitValid: timeCommitValid,
+                    monthValid: monthValid,
+                    dayValid: dayValid,
+                    yearValid: yearValid,
+                    describeValid: describeValid
+                  }, this.validateForm);
+  }
+
+  errorClass(error) {
+    return(error.length === 0 ? '' : 'has-error');
+ }
+  
+  validateForm() {
+    this.setState({formValid: this.state.emailValid && this.state.passwordValid});
+  }
+
   render() {
     const {
       jobSearchType,
@@ -274,6 +353,9 @@ class Model extends React.Component {
           <span aria-hidden="true">&times;</span>
           </button>
           </h4>
+          <div className="panel panel-default">
+            <FormErrors formErrors={this.state.formErrors} />
+          </div>
           <h2 ref={subtitle => this.subtitle = subtitle}></h2>
           
           <p>How serious is your job search?</p>
@@ -311,9 +393,11 @@ class Model extends React.Component {
             <FormGroup>
               <Label for="position">Position (ie: Resident Nurse)*</Label>
               <div>
-              <Input type="text" id="position" placeholder="Position" name="position" 
+              {/* className={`form-group ${this.errorClass(this.state.formErrors.email)}`} */}
+              <Input className={`form-group ${this.errorClass(this.state.formErrors.position)}`}
+               type="text" id="position" placeholder="Position" name="position" 
               value={position} 
-              onChange={event => this.setState(byPropKey('position', event.target.value))} />
+              onChange={event => this.setState(byPropKey('position', event.target.value), this.handleUserInput(event))}/>
             </div>
           </FormGroup>
           <div className="form-row">
@@ -321,22 +405,22 @@ class Model extends React.Component {
               <Label for="minimumsalary">Minimum salary</Label>
               <FormText>What's the lowest salary you'd take in order to get into a new job?</FormText>
               <div>    
-              <CurrencyFormat className="form-control" 
+              <CurrencyFormat className="form-control" name="minsalary"
               placeholder="Minimum salary" 
               thousandSeparator={true} prefix={'$'} 
               value={minSalary} 
-              onChange={event => this.setState(byPropKey('minSalary', event.target.value))}/>   
+              onChange={event => this.setState(byPropKey('minSalary', event.target.value), this.handleUserInput(event))}/>   
               </div>
             </FormGroup>
             <FormGroup className="form-group col-md-6">
               <Label for="anticipatedalary">Anticipated salary</Label>
               <FormText>What are you expecting as your total compensation for you first year?</FormText>
               <div>          
-              <CurrencyFormat className="form-control" 
+              <CurrencyFormat className="form-control" name="maxsalary"
               placeholder="Anticipated salary" 
               thousandSeparator={true} prefix={'$'} 
               value={maxSalary} 
-              onChange={event => this.setState(byPropKey('maxSalary', event.target.value))}/>
+              onChange={event => this.setState(byPropKey('maxSalary', event.target.value), this.handleUserInput(event))}/>
               </div>
             </FormGroup>
           </div>
@@ -345,7 +429,7 @@ class Model extends React.Component {
                 <Label for="companysize">Ideal company Size*</Label>
                 <Input type="select" name="companysize" 
                 value={companySize} 
-                onChange={event => this.setState(byPropKey('companySize', event.target.value))}
+                onChange={event => this.setState(byPropKey('companySize', event.target.value), this.handleUserInput(event))}
                 id="companysize">
                   <option value="0-100">0-100</option>
                   <option value="0-1000">0-1000</option>
@@ -357,7 +441,7 @@ class Model extends React.Component {
                 <Label for="time">Time commitment</Label>
                 <Input type="select" name="time" id="time" 
                 value={timeCommit} 
-                onChange={event => this.setState(byPropKey('timeCommit', event.target.value))}>
+                onChange={event => this.setState(byPropKey('timeCommit', event.target.value), this.handleUserInput(event))}>
                   <option>select</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -368,26 +452,26 @@ class Model extends React.Component {
               </FormGroup>
               <FormGroup className="form-group col-md-2">
                 <Label for="month">Month</Label>
-                <Input type="number" 
+                <Input type="number" name="month"
                 value={month} 
-                onChange={event => this.setState(byPropKey('month', event.target.value))}
-                placeholder="Month" invalid>
+                onChange={event => this.setState(byPropKey('month', event.target.value), this.handleUserInput(event))}
+                placeholder="Month">
                 </Input>
                 <FormFeedback>Oh noes! that name is already taken</FormFeedback>
               </FormGroup>
               <FormGroup className="form-group col-md-2">
                 <Label for="day">Day</Label>
-                <Input type="number" 
+                <Input type="number" name="day"
                 value={day} 
-                onChange={event => this.setState(byPropKey('day', event.target.value))}
+                onChange={event => this.setState(byPropKey('day', event.target.value), this.handleUserInput(event))}
                 placeholder="Day">
                 </Input>
               </FormGroup>
               <FormGroup className="form-group col-md-2">
                 <Label for="year">Year</Label>
-                <Input type="number" 
+                <Input type="number" name="year"
                 value={year} 
-                onChange={event => this.setState(byPropKey('year', event.target.value))}
+                onChange={event => this.setState(byPropKey('year', event.target.value), this.handleUserInput(event))}
                 placeholder="Year">
                 </Input>
               </FormGroup>
@@ -397,13 +481,13 @@ class Model extends React.Component {
             <Input type="textarea" name="describe" id="describe" rows={4} maxLength={this.state.max_char}
             required
             value={describe} 
-            onChange={event => this.setState(byPropKey('describe', event.target.value), this.handleWordCount)}
+            onChange={event => this.setState(byPropKey('describe', event.target.value), this.handleWordCount, this.handleUserInput(event))}
             placeholder="Describe your ideal job" /><span className="textarea__count">{this.state.chars_left}/{this.state.max_char}</span>
             <FormText>*Required</FormText>
           </FormGroup>
           <FormGroup>        
             <div>
-              <button id="savebtn" type="submit" className="btn btn-primary">Save</button>
+              <button id="savebtn" type="submit" className="btn btn-primary" disabled={!this.state.formValid}>Save</button>
             </div>
           </FormGroup>
           </Form>
