@@ -329,8 +329,8 @@ class Model extends React.Component {
     } = this.state;
 
     return (
-      <div className ="container modal-open">
-        <Button onClick={this.openModal}>Open Modal</Button>
+      <div className ="container modal-open input-fields">
+        <h5 className="editidealjob" onClick={this.openModal}>Edit Ideal Job</h5>
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
@@ -340,7 +340,7 @@ class Model extends React.Component {
         >
           <h4 toggle={this.toggle}>Edit your ideal job
           {/* <Button onClick={this.closeModal}>close</Button> */}
-          <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={this.closeModal}>
+          <button type="button" className="close input-fields" data-dismiss="modal" aria-label="Close" onClick={this.closeModal}>
           <span aria-hidden="true">&times;</span>
           </button>
           </h4>
@@ -357,21 +357,21 @@ class Model extends React.Component {
             </ul> */}
 
             <div className="card">
-              <div className="card-body" onClick={this.handleClick.bind(this)} 
+              <div className="card-body input-fields" onClick={this.handleClick.bind(this)} 
               style={{backgroundColor: this.state.passiveData.color, color: this.state.passiveData.textColor}}>
                 <h5 className="card-title">Passive</h5>
                 <h6 className="card-subtitle mb-2 text-muted" style={{color: this.state.passiveData.textColor}}>{this.state.passiveData.description}</h6>
               </div>
             </div><br/>
             <div className="card">
-              <div className="card-body" onClick={this.handleClick.bind(this)} 
+              <div className="card-body input-fields" onClick={this.handleClick.bind(this)} 
               style={{backgroundColor: this.state.activeData.color, color: this.state.activeData.textColor}}>
                 <h5 className="card-title">Active</h5>
                 <h6 className="card-subtitle mb-2 text-muted" style={{color: this.state.activeData.textColor}}>{this.state.activeData.description}</h6>
               </div>
             </div><br/>
             <div className="card">
-              <div className="card-body" onClick={this.handleClick.bind(this)} 
+              <div className="card-body input-fields" onClick={this.handleClick.bind(this)} 
               style={{backgroundColor: this.state.urgentData.color, color: this.state.urgentData.textColor}}>
                 <h5 className="card-title">Urgent</h5>
                 <h6 className="card-subtitle mb-2 text-muted" style={{color: this.state.urgentData.textColor}}>{this.state.urgentData.description}</h6>
@@ -382,7 +382,7 @@ class Model extends React.Component {
               <Label for="position">Position (ie: Resident Nurse)*</Label>
               <div>
               {/* className={`form-group ${this.errorClass(this.state.formErrors.email)}`} */}
-              <Input className={`form-group ${this.errorClass(this.state.formErrors.position)}`}
+              <Input className={`form-group input-fields ${this.errorClass(this.state.formErrors.position)}`}
                type="text" id="position" placeholder="Position" name="position" maxLength={50}
               value={position} 
               required
@@ -394,7 +394,7 @@ class Model extends React.Component {
               <Label for="minimumsalary">Minimum salary</Label>
               <FormText>What's the lowest salary you'd take in order to get into a new job?</FormText>
               <div>    
-              <CurrencyFormat className={`form-control ${this.errorClass(this.state.formErrors.minSalary)}`} name="minsalary"
+              <CurrencyFormat className={`form-control input-fields ${this.errorClass(this.state.formErrors.minSalary)}`} name="minsalary"
               placeholder="Minimum salary" 
               thousandSeparator={true} prefix={'$'} 
               value={minSalary} 
@@ -405,7 +405,7 @@ class Model extends React.Component {
               <Label for="anticipatedalary">Anticipated salary</Label>
               <FormText>What are you expecting as your total compensation for you first year?</FormText>
               <div>          
-              <CurrencyFormat className={`form-control ${this.errorClass(this.state.formErrors.maxSalary)}`} name="maxsalary"
+              <CurrencyFormat className={`form-control input-fields ${this.errorClass(this.state.formErrors.maxSalary)}`} name="maxsalary"
               placeholder="Anticipated salary" 
               thousandSeparator={true} prefix={'$'} 
               value={maxSalary} 
@@ -416,7 +416,7 @@ class Model extends React.Component {
           <div className="form-row">
               <FormGroup className="form-group col-md-3">
                 <Label for="companysize">Ideal company Size*</Label>
-                <Input type="select" name="companysize" className={`form-control ${this.errorClass(this.state.formErrors.companySize)}`}
+                <Input type="select" name="companysize" className={`form-control input-fields ${this.errorClass(this.state.formErrors.companySize)}`}
                 value={companySize} 
                 onChange={event => this.setState(byPropKey('companySize', event.target.value), this.handleUserInput(event))}
                 id="companysize">
@@ -429,7 +429,7 @@ class Model extends React.Component {
               </FormGroup>
               <FormGroup className="form-group col-md-3">
                 <Label for="time">Time commitment</Label>
-                <Input type="select" name="time" id="time" className={`form-control ${this.errorClass(this.state.formErrors.timeCommit)}`}
+                <Input type="select" name="time" id="time" className={`form-control input-fields ${this.errorClass(this.state.formErrors.timeCommit)}`}
                 value={timeCommit} 
                 onChange={event => this.setState(byPropKey('timeCommit', event.target.value), this.handleUserInput(event))}>
                   <option value="select">select</option>
@@ -442,7 +442,7 @@ class Model extends React.Component {
               </FormGroup>
               <FormGroup className="form-group col-md-2">
                 <Label for="month">Month</Label>
-                <Input type="number" name="month" className={`form-control ${this.errorClass(this.state.formErrors.month)}`}
+                <Input type="number" name="month" className={`form-control input-fields ${this.errorClass(this.state.formErrors.month)}`}
                 maxLength={2}
                 value={month} 
                 onChange={event => this.setState(byPropKey('month', event.target.value), this.handleUserInput(event))}
@@ -452,7 +452,7 @@ class Model extends React.Component {
               </FormGroup>
               <FormGroup className="form-group col-md-2">
                 <Label for="day">Day</Label>
-                <Input type="number" name="day" className={`form-control ${this.errorClass(this.state.formErrors.day)}`}
+                <Input type="number" name="day" className={`form-control input-fields ${this.errorClass(this.state.formErrors.day)}`}
                 maxLength={2}
                 value={day} 
                 onChange={event => this.setState(byPropKey('day', event.target.value), this.handleUserInput(event))}
@@ -462,7 +462,7 @@ class Model extends React.Component {
               <FormGroup className="form-group col-md-2">
                 <Label for="year">Year</Label>
                 <Input type="number" name="year" maxLength={4}
-                 className={`form-control ${this.errorClass(this.state.formErrors.year)}`}
+                 className={`form-control input-fields ${this.errorClass(this.state.formErrors.year)}`}
                 value={year} 
                 onChange={event => this.setState(byPropKey('year', event.target.value), this.handleUserInput(event))}
                 placeholder="Year">
@@ -472,7 +472,7 @@ class Model extends React.Component {
           <FormGroup>
             <Label for="describe">Describe your ideal job</Label>
             <Input type="textarea" name="describe" id="describe" rows={4} maxLength={this.state.max_char} 
-            className={`form-control ${this.errorClass(this.state.formErrors.describe)}`}
+            className={`form-control input-fields ${this.errorClass(this.state.formErrors.describe)}`}
             required
             value={describe} 
             onChange={event => this.setState(byPropKey('describe', event.target.value), this.handleWordCount, this.handleUserInput(event))}
@@ -481,7 +481,7 @@ class Model extends React.Component {
           </FormGroup>
           <FormGroup>        
             <div>
-              <button id="savebtn" type="submit" className="btn btn-primary" disabled={!this.state.formValid}>Save</button>
+              <button id="savebtn" type="submit" className="btn btn-primary input-fields" disabled={!this.state.formValid}>Save</button>
             </div>
           </FormGroup>
           </Form>
